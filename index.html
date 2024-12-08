@@ -1,3 +1,4 @@
+
 <html><head><base href="." />
 <title>Bitcoin Faucet - Gana Tokens y Satoshis</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -96,11 +97,13 @@ button:disabled {
 .ad-space {
     background: #eee;
     padding: 20px;
-    margin: 20px auto;
+    margin: 20px auto; /* Changed to auto margins for horizontal centering */
     text-align: center;
     max-width: 800px;
     box-sizing: border-box;
     clear: both;
+    display: block; /* Added to ensure block-level behavior */
+    width: 100%; /* Added to ensure full width within max-width constraint */
 }
 
 .ad-side {
@@ -187,17 +190,12 @@ button:disabled {
         box-sizing: border-box;
     }
     
-    .ad-side {
-        display: block;
-    }
-    
-    .container {
-        margin: 20px auto;
-    }
-    
     #topAd, #bottomAd {
-        max-width: calc(100% - 400px); /* Account for side ads */
-        margin: 20px auto;
+        max-width: calc(100% - 400px);
+        margin: 20px auto; /* Changed to auto margins */
+        position: relative; /* Added for better positioning */
+        left: 50%; /* Added for centering */
+        transform: translateX(-50%); /* Added for centering */
     }
 }
 
@@ -206,18 +204,13 @@ button:disabled {
         padding: 20px;
     }
     
-    .container {
-        margin: 20px auto;
-    }
-    
-    .ad-side {
-        display: none;
-    }
-    
     #topAd, #bottomAd {
         width: 100%;
         max-width: 800px;
-        margin: 20px auto;
+        margin: 20px auto; /* Changed to auto margins */
+        position: relative; /* Added for better positioning */
+        left: 50%; /* Added for centering */
+        transform: translateX(-50%); /* Added for centering */
     }
 }
 
@@ -387,8 +380,7 @@ button:disabled {
 </style>
 </head>
 <body>
-    <center><div class="ad-space" id="topAd"><div id="frame" style="width:728px; height:auto;"><iframe data-aa='2369380' src='//ad.a-ads.com/2369380?size=728x90' style='width:728px; height:90px; border:0px; padding:0; overflow:hidden; background-color: transparent;'></iframe><a style="display: block; text-align: right; font-size: 12px;" id="preview-link" href="https://aads.com/campaigns/new/?source_id=2369380&source_type=ad_unit&partner=2369380">Advertise here</a></div></center>
-</div>
+    <div class="ad-space" id="topAd">Espacio Publicitario Superior</div>
     <div class="ad-side ad-left" id="leftAd">Anuncios Laterales</div>
     <div class="ad-side ad-right" id="rightAd">Anuncios Laterales</div>
 
