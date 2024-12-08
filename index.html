@@ -129,18 +129,41 @@ button:disabled {
     height: 100%;
     background: rgba(0,0,0,0.7);
     z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
     background: white;
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
     width: 90%;
     max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content .ad-space {
+    width: 100%;
+    max-width: 100%;
+    margin: 20px auto;
+    transform: none;
+    left: auto;
+    position: relative;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-content button {
+    min-width: 150px;
+    margin: 10px;
 }
 
 .captcha-container {
@@ -459,8 +482,10 @@ button:disabled {
                 <div class="simple-captcha" id="captchaText"></div>
                 <input type="text" class="captcha-input" id="captchaInput" placeholder="Ingresa el código">
             </div>
-            <button onclick="verifyAndClaim()">Verificar y Reclamar</button>
-            <button onclick="closeClaimModal()" style="background: #666;">Cancelar</button>
+            <div class="modal-buttons">
+                <button onclick="verifyAndClaim()">Verificar y Reclamar</button>
+                <button onclick="closeClaimModal()" style="background: #666;">Cancelar</button>
+            </div>
             <div class="ad-space">Espacio Publicitario Inferior</div>
         </div>
     </div>
