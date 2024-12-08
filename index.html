@@ -17,7 +17,7 @@ body {
 
 .container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
     background: white;
     border-radius: 10px;
@@ -83,6 +83,16 @@ button:disabled {
     margin-top: 20px;
 }
 
+.wallet-input-container {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.wallet-input-container input {
+    flex: 1;
+}
+
 .ad-space {
     background: #eee;
     padding: 20px;
@@ -90,6 +100,7 @@ button:disabled {
     text-align: center;
     max-width: 800px;
     box-sizing: border-box;
+    clear: both;
 }
 
 .ad-side {
@@ -101,10 +112,11 @@ button:disabled {
     top: 50%;
     transform: translateY(-50%);
     display: none;
+    z-index: 0;
 }
 
-.ad-left { left: 20px; }
-.ad-right { right: 20px; }
+.ad-left { left: 10px; }
+.ad-right { right: 10px; }
 
 .modal {
     display: none;
@@ -168,29 +180,63 @@ button:disabled {
 }
 
 @media screen and (min-width: 1200px) {
-    .ad-side { display: block; }
-    .container { margin: 0 auto; }
-    body { padding: 20px calc(200px + 2rem); }
-}
-
-@media screen and (max-width: 1199px) {
-    body { padding: 20px; }
-    .container { margin: 0 auto; }
-}
-
-@media screen and (min-width: 1600px) {
     body {
-        max-width: 1600px;
+        padding: 20px calc(180px + 2rem);
+        max-width: 1400px;
         margin: 0 auto;
+        box-sizing: border-box;
+    }
+    
+    .ad-side {
+        display: block;
+    }
+    
+    .container {
+        margin: 20px auto;
+    }
+    
+    #topAd, #bottomAd {
+        max-width: calc(100% - 400px); /* Account for side ads */
+        margin: 20px auto;
     }
 }
 
-input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+@media screen and (max-width: 1199px) {
+    body {
+        padding: 20px;
+    }
+    
+    .container {
+        margin: 20px auto;
+    }
+    
+    .ad-side {
+        display: none;
+    }
+    
+    #topAd, #bottomAd {
+        width: 100%;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+}
+
+#walletRegistration {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+#walletRegistration h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.wallet-input-container {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .success-page {
@@ -259,6 +305,85 @@ input[type="text"] {
     transform: scale(1.05);
     background: #e09000;
 }
+
+.admin-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 3000;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.admin-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.withdrawal-request {
+    background: #f8f9fa;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.withdrawal-request.completed {
+    background: #e8f5e9;
+}
+
+.withdrawal-request button {
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+.leaderboard {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.leaderboard-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+
+.wallet-status {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status-active {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-paid {
+    background: #f5f5f5;
+    color: #666;
+}
 </style>
 </head>
 <body>
@@ -267,24 +392,32 @@ input[type="text"] {
     <div class="ad-side ad-right" id="rightAd">Anuncios Laterales</div>
 
     <div class="container">
-        <div class="logo">
-            <svg class="bitcoin-logo" width="100" height="100" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="45" fill="#f2a900"/>
-                <path d="M63.5,35.5c1.5,6-4.5,9-4.5,9l5,21h-8l-4.5-19.5h-6L50,65h-8l-4.5-19.5H33L31,37.5h4.5L32,27h8l3.5,10.5h6L46,27h8l3.5,10.5C57.5,37.5,62,29.5,63.5,35.5z" fill="white"/>
-            </svg>
+        <div id="walletRegistration" style="margin-bottom: 30px;">
+            <h3>Registra tu Billetera Bitcoin</h3>
+            <div class="wallet-input-container">
+                <input type="text" id="userBtcAddress" placeholder="Ingresa tu dirección Bitcoin" required>
+                <button onclick="registerWallet()">Registrar Billetera</button>
+            </div>
         </div>
 
-        <div class="welcome-message">
-            <h2>¡Bienvenido a Bitcoin Faucet!</h2>
-            <p>Metodología de nuestra faucet:</p>
-            <ul>
-                <li>Gana 25 tokens cada vez que reclames</li>
-                <li>Al acumular 5000 tokens, podrás canjearlos por 50 satoshis</li>
-            </ul>
-            <p>Una vez alcances los 5000 tokens, podrás canjearlos por satoshis que serán enviados a tu billetera Bitcoin.</p>
-        </div>
+        <div class="faucet-container" style="display: none;">
+            <div class="logo">
+                <svg class="bitcoin-logo" width="100" height="100" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#f2a900"/>
+                    <path d="M63.5,35.5c1.5,6-4.5,9-4.5,9l5,21h-8l-4.5-19.5h-6L50,65h-8l-4.5-19.5H33L31,37.5h4.5L32,27h8l3.5,10.5h6L46,27h8l3.5,10.5C57.5,37.5,62,29.5,63.5,35.5z" fill="white"/>
+                </svg>
+            </div>
 
-        <div class="faucet-container">
+            <div class="welcome-message">
+                <h2>¡Bienvenido a Bitcoin Faucet!</h2>
+                <p>Metodología de nuestra faucet:</p>
+                <ul>
+                    <li>Gana 25 tokens cada vez que reclames</li>
+                    <li>Al acumular 5000 tokens, podrás canjearlos por 50 satoshis</li>
+                </ul>
+                <p>Una vez alcances los 5000 tokens, podrás canjearlos por satoshis que serán enviados a tu billetera Bitcoin.</p>
+            </div>
+
             <div class="balance">Tokens: <span id="balance">0</span></div>
             <button id="claimButton" onclick="showClaimModal()">¡Reclamar Tokens!</button>
             <div id="timer" style="margin-top: 10px; color: #666;"></div>
@@ -294,6 +427,15 @@ input[type="text"] {
                 <input type="text" id="btcAddress" placeholder="Ingresa tu dirección Bitcoin" required>
                 <button type="submit">Canjear Tokens</button>
             </form>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 20px;">
+        <div class="leaderboard">
+            <h3>Clasificación de Usuarios</h3>
+            <div class="leaderboard-list" id="leaderboardList">
+                <!-- User stats will be populated here -->
+            </div>
         </div>
     </div>
 
@@ -330,6 +472,15 @@ input[type="text"] {
 
     <div class="ad-space" id="bottomAd">Espacio Publicitario Inferior</div>
 
+    <div class="admin-panel" id="adminPanel" style="display: none;">
+        <div class="admin-container">
+            <h2>Panel de Administración</h2>
+            <div class="withdrawal-requests" id="withdrawalRequests">
+                <!-- Requests will be populated here -->
+            </div>
+        </div>
+    </div>
+
 <script>
 let balance = 0;
 let lastClaimTime = 0;
@@ -337,6 +488,45 @@ const CLAIM_COOLDOWN = 5 * 60 * 1000; // 5 minutos en milisegundos
 const TOKENS_PER_CLAIM = 25;
 const TOKENS_NEEDED = 5000;
 let currentCaptcha = '';
+let currentWallet = '';
+let userStats = {};
+
+// Load user stats from localStorage
+function loadUserStats() {
+    userStats = JSON.parse(localStorage.getItem('userStats') || '{}');
+    updateLeaderboard();
+}
+
+// Save user stats to localStorage
+function saveUserStats() {
+    localStorage.setItem('userStats', JSON.stringify(userStats));
+    updateLeaderboard();
+}
+
+function registerWallet() {
+    const walletInput = document.getElementById('userBtcAddress');
+    const wallet = walletInput.value.trim();
+    
+    if (!wallet) {
+        alert('Por favor ingresa una dirección Bitcoin válida');
+        return;
+    }
+    
+    currentWallet = wallet;
+    if (!userStats[wallet]) {
+        userStats[wallet] = {
+            tokens: 0,
+            paid: false,
+            lastUpdated: Date.now()
+        };
+    }
+    
+    document.getElementById('walletRegistration').style.display = 'none';
+    document.querySelector('.faucet-container').style.display = 'block';
+    
+    saveUserStats();
+    updateBalance();
+}
 
 function generateCaptcha() {
     const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -398,6 +588,11 @@ function closeClaimModal() {
 }
 
 function verifyAndClaim() {
+    if (!currentWallet) {
+        alert('Por favor registra tu billetera Bitcoin primero');
+        return;
+    }
+
     const userInput = document.getElementById('captchaInput').value.toUpperCase();
     if (userInput !== currentCaptcha) {
         alert('Código CAPTCHA incorrecto. Intenta nuevamente.');
@@ -406,9 +601,12 @@ function verifyAndClaim() {
         return;
     }
 
-    balance += TOKENS_PER_CLAIM;
+    userStats[currentWallet].tokens += TOKENS_PER_CLAIM;
+    balance = userStats[currentWallet].tokens;
     document.getElementById('balance').textContent = balance;
     lastClaimTime = Date.now();
+    
+    saveUserStats();
     
     alert(`¡Felicitaciones! Has ganado ${TOKENS_PER_CLAIM} tokens`);
     
@@ -485,16 +683,103 @@ updateBitcoinPrice();
 document.getElementById('withdrawForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const btcAddress = document.getElementById('btcAddress').value;
-    const emailBody = `Nueva solicitud de canje:\nDirección BTC: ${btcAddress}\nTokens: ${balance}\nSatoshis a recibir: 50`;
+    if (!currentWallet) {
+        alert('Por favor registra tu billetera Bitcoin primero');
+        return;
+    }
     
-    window.location.href = `mailto:dnielblandon@hotmail.com?subject=Canje%20Tokens%20por%20Satoshis&body=${encodeURIComponent(emailBody)}`;
+    const withdrawalRequest = {
+        address: currentWallet,
+        tokens: userStats[currentWallet].tokens,
+        satoshis: 50,
+        timestamp: Date.now(),
+        status: 'pending'
+    };
     
-    alert('Solicitud de canje enviada. Te contactaremos pronto.');
+    let withdrawalRequests = JSON.parse(localStorage.getItem('withdrawalRequests') || '[]');
+    withdrawalRequests.push(withdrawalRequest);
+    localStorage.setItem('withdrawalRequests', JSON.stringify(withdrawalRequests));
+    
+    userStats[currentWallet].tokens = 0;
+    userStats[currentWallet].paid = true;
+    saveUserStats();
+    
+    balance = 0;
+    document.getElementById('balance').textContent = balance;
+    document.getElementById('withdrawForm').style.display = 'none';
+    
+    alert('Solicitud de canje registrada. Procesaremos tu pago pronto.');
 });
 
-// Iniciar el temporizador cuando se carga la página
-updateTimer();
+// Leaderboard update function
+function updateLeaderboard() {
+    const leaderboardList = document.getElementById('leaderboardList');
+    leaderboardList.innerHTML = '';
+    
+    Object.entries(userStats).forEach(([wallet, stats]) => {
+        const item = document.createElement('div');
+        item.className = 'leaderboard-item';
+        item.innerHTML = `
+            <div class="wallet-address">${wallet.substring(0, 8)}...${wallet.substring(wallet.length - 8)}</div>
+            <div class="tokens">${stats.tokens} tokens</div>
+            <div class="wallet-status ${stats.paid ? 'status-paid' : 'status-active'}">
+                ${stats.paid ? 'Pagado' : 'Activo'}
+            </div>
+        `;
+        leaderboardList.appendChild(item);
+    });
+}
+
+// Admin panel functions
+function showAdminPanel() {
+    if (prompt('Enter admin password:') === 'admin123') { // Change this to a secure password
+        document.getElementById('adminPanel').style.display = 'block';
+        loadWithdrawalRequests();
+    }
+}
+
+function loadWithdrawalRequests() {
+    const requests = JSON.parse(localStorage.getItem('withdrawalRequests') || '[]');
+    const container = document.getElementById('withdrawalRequests');
+    container.innerHTML = '';
+    
+    requests.forEach((request, index) => {
+        const requestElement = document.createElement('div');
+        requestElement.className = `withdrawal-request ${request.status === 'completed' ? 'completed' : ''}`;
+        requestElement.innerHTML = `
+            <div>
+                <p><strong>Dirección BTC:</strong> ${request.address}</p>
+                <p><strong>Tokens:</strong> ${request.tokens}</p>
+                <p><strong>Satoshis:</strong> ${request.satoshis}</p>
+                <p><strong>Fecha:</strong> ${new Date(request.timestamp).toLocaleString()}</p>
+                <p><strong>Estado:</strong> ${request.status}</p>
+            </div>
+            <div>
+                ${request.status === 'pending' ? 
+                    `<button onclick="markAsCompleted(${index})">Marcar como Pagado</button>` : 
+                    '<button disabled>Completado</button>'}
+            </div>
+        `;
+        container.appendChild(requestElement);
+    });
+}
+
+function markAsCompleted(index) {
+    let requests = JSON.parse(localStorage.getItem('withdrawalRequests') || '[]');
+    requests[index].status = 'completed';
+    localStorage.setItem('withdrawalRequests', JSON.stringify(requests));
+    loadWithdrawalRequests();
+}
+
+// Add keyboard shortcut to open admin panel (Ctrl + Shift + A)
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        showAdminPanel();
+    }
+});
+
+// Load user stats when page loads
+window.addEventListener('load', loadUserStats);
 </script>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
