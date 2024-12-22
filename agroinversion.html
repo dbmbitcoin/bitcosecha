@@ -1,0 +1,456 @@
+<html><head><base href="." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroInversión Colectiva - Donaciones</title>
+<style>
+:root {
+  --primary-color: #2ecc71;
+  --secondary-color: #27ae60;
+  --background-color: #f9f9f9;
+  --text-color: #333;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.investment-card {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.benefit-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.invest-button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.invest-button:hover {
+  background-color: var(--secondary-color);
+}
+
+.farm-animation {
+  width: 100%;
+  height: 200px;
+  margin: 2rem 0;
+}
+
+@keyframes grow {
+  0% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+.animated {
+  animation: grow 2s infinite alternate ease-in-out;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+}
+
+.close-modal {
+  float: right;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.investment-breakdown {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.cost-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.cost-item:last-child {
+  border-bottom: none;
+}
+
+.total-cost {
+  font-weight: bold;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--primary-color);
+}
+
+.warning-text {
+  color: #e74c3c;
+  font-weight: bold;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #ffeaea;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.thank-you-message {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 2rem;
+  background-color: #e8f8f5;
+  border-radius: 10px;
+}
+
+.progress-container {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.progress-bar-outer {
+  width: 100%;
+  height: 30px;
+  background-color: #eee;
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-bar-inner {
+  height: 100%;
+  background-color: var(--primary-color);
+  width: 0%;
+  transition: width 0.5s ease-in-out;
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+  <header class="header">
+    <h1>AgroInversión Colectiva</h1>
+    <p>Dona $1 para apoyar el futuro de la agricultura sostenible</p>
+  </header>
+
+  <div class="container">
+    <div class="progress-container">
+      <h3>Progreso de Donaciones</h3>
+      <div class="progress-bar-outer">
+        <div id="progressBar" class="progress-bar-inner"></div>
+      </div>
+      <div class="progress-stats">
+        <span>Recaudado: $<span id="currentAmount">0</span> USD</span>
+        <span>Meta: $988 USD</span>
+      </div>
+      <p>Donadores: <span id="donorCount">0</span></p>
+    </div>
+
+    <div class="investment-card">
+      <h2>Proyecto: Cultivo de Frijol</h2>
+      <p class="warning-text">Importante: Solo se permite una donación de $1 por persona para garantizar una participación equitativa en el proyecto.</p>
+      <p>Tu donación de $1 se suma a la de otros colaboradores para hacer posible este proyecto agrícola. Aquí te mostramos el desglose detallado de la inversión:</p>
+
+      <div class="investment-breakdown">
+        <h3>Desglose de Costos del Proyecto</h3>
+        <div class="cost-item">
+          <span>Preparación del Terreno</span>
+          <span>$75 USD (COP 300,000)</span>
+        </div>
+        <div class="cost-item">
+          <span>Semilla</span>
+          <span>$88 USD (COP 350,000)</span>
+        </div>
+        <div class="cost-item">
+          <span>Fertilizantes</span>
+          <span>$100 USD (COP 400,000)</span>
+        </div>
+        <div class="cost-item">
+          <span>Control de Plagas</span>
+          <span>$50 USD (COP 200,000)</span>
+        </div>
+        <div class="cost-item">
+          <span>Sistema de Riego</span>
+          <span>$250 USD (COP 1,000,000)</span>
+        </div>
+        <div class="cost-item">
+          <span>Mano de Obra</span>
+          <span>$200 USD (COP 800,000)</span>
+        </div>
+        <div class="cost-item">
+          <span>Cosecha</span>
+          <span>$225 USD (COP 900,000)</span>
+        </div>
+        <div class="cost-item total-cost">
+          <span>Inversión Total del Proyecto</span>
+          <span>$988 USD (COP 3,950,000)</span>
+        </div>
+      </div>
+
+      <div class="investment-card">
+        <h2>Participación en Ganancias</h2>
+        <p>Como donador del proyecto, participarás en la distribución de ganancias una vez completada la cosecha. El proceso funciona así:</p>
+        <ul>
+          <li>Tu donación de $1 te convierte en participante del proyecto agrícola</li>
+          <li>Al finalizar la cosecha, se venderá toda la producción de frijol</li>
+          <li>Las ganancias totales (ingresos por ventas menos costos operativos) serán distribuidas proporcionalmente entre todos los donadores</li>
+          <li>Recibirás tu parte correspondiente de las ganancias directamente a través de PayPal</li>
+          <li>La distribución se realizará dentro de los 15 días posteriores a la venta de la cosecha</li>
+        </ul>
+      </div>
+
+      <h2>¿Cómo funciona?</h2>
+      <p>Con tu donación única de $1, serás parte de nuestra comunidad de inversores agrícolas. Tu aporte será utilizado para:</p>
+      <ul>
+        <li>Adquisición y mantenimiento de terrenos agrícolas</li>
+        <li>Cultivo de productos de alta demanda</li>
+        <li>Gestión profesional de la producción</li>
+        <li>Distribución de ganancias entre todos los inversores</li>
+      </ul>
+      
+      <svg class="farm-animation animated" viewBox="0 0 100 100">
+        <rect x="10" y="60" width="20" height="30" fill="#8B4513"/>
+        <polygon points="5,60 35,60 20,40" fill="#228B22"/>
+        <circle cx="70" cy="30" r="10" fill="#FFD700"/>
+        <path d="M60,80 Q70,60 80,80" stroke="#228B22" fill="none" stroke-width="2"/>
+      </svg>
+
+      <div class="benefits">
+        <div class="benefit-item">
+          <h3>Transparencia</h3>
+          <p>Seguimiento en tiempo real de las inversiones y cultivos</p>
+        </div>
+        <div class="benefit-item">
+          <h3>Rentabilidad</h3>
+          <p>Participación en las ganancias de la venta de productos</p>
+        </div>
+        <div class="benefit-item">
+          <h3>Impacto Social</h3>
+          <p>Apoyo a la agricultura sostenible y comunidades locales</p>
+        </div>
+      </div>
+
+      <h2>¿Listo para donar?</h2>
+      <p>Completa tus datos y realiza tu donación única de $1:</p>
+      <form id="donationForm" onsubmit="submitForm(event)">
+        <div class="form-group">
+          <label for="nombre">Nombre Completo:</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Correo Electrónico:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono:</label>
+          <input type="tel" id="telefono" name="telefono" required>
+        </div>
+        <div class="form-group">
+          <label for="identificacion">Número de Identificación:</label>
+          <input type="text" id="identificacion" name="identificacion" required>
+        </div>
+        <button type="submit" class="invest-button">Donar $1 USD con PayPal</button>
+      </form>
+    </div>
+
+    <div class="investment-card">
+      <h2>Preguntas Frecuentes</h2>
+      <h3>¿Por qué solo $1 por persona?</h3>
+      <p>Limitamos la donación a $1 por persona para garantizar una participación equitativa y permitir que más personas puedan ser parte del proyecto.</p>
+      
+      <h3>¿Cómo se distribuyen las ganancias?</h3>
+      <p>Una vez vendida la cosecha, se calculará la ganancia total (ingresos por venta menos costos operativos). Esta ganancia se distribuirá equitativamente entre todos los donadores del proyecto. Por ejemplo, si la ganancia total es de $2,000 USD y hay 988 donadores, cada donador recibiría aproximadamente $2.02 USD de retorno por su donación inicial de $1.</p>
+
+      <h3>¿Cuándo recibiré mi parte de las ganancias?</h3>
+      <p>El ciclo completo del cultivo de frijol toma aproximadamente 4-6 meses. Una vez completada la cosecha y realizada la venta, procesaremos la distribución de ganancias dentro de los siguientes 15 días. Recibirás una notificación por correo electrónico con los detalles de tu pago y el rendimiento obtenido.</p>
+    </div>
+  </div>
+
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+      <h2>¡Gracias por tu donación!</h2>
+      <p>Hemos registrado tus datos correctamente. Te enviaremos un correo electrónico con información detallada sobre el progreso del proyecto y los tiempos estimados de retorno de tu inversión.</p>
+      <button class="invest-button" onclick="proceedToPaypal()">Continuar a PayPal</button>
+    </div>
+  </div>
+
+  <script>
+    let currentAmount = 0;
+    let donorCount = 0;
+    const targetAmount = 988; // Total project cost in USD
+
+    async function submitForm(e) {
+      e.preventDefault();
+      
+      const formData = {
+        nombre: document.getElementById('nombre').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
+        identificacion: document.getElementById('identificacion').value
+      };
+
+      try {
+        await fetch('https://formspree.io/f/dnielblandon@hotmail.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        document.getElementById('confirmationModal').style.display = 'block';
+      } catch (error) {
+        alert('Hubo un error al procesar tu solicitud. Por favor, intenta nuevamente.');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('confirmationModal').style.display = 'none';
+    }
+
+    function updateProgressBar() {
+      const progressBar = document.getElementById('progressBar');
+      const currentAmountSpan = document.getElementById('currentAmount');
+      const donorCountSpan = document.getElementById('donorCount');
+      
+      currentAmount += 1; // Add $1 for each donation
+      donorCount += 1;
+      
+      const progressPercentage = (currentAmount / targetAmount) * 100;
+      progressBar.style.width = `${Math.min(progressPercentage, 100)}%`;
+      currentAmountSpan.textContent = currentAmount;
+      donorCountSpan.textContent = donorCount;
+    }
+
+    function proceedToPaypal() {
+      const paypalForm = document.createElement('form');
+      paypalForm.method = 'post';
+      paypalForm.action = 'https://www.paypal.com/cgi-bin/webscr';
+      paypalForm.target = '_blank';
+
+      const cmdInput = document.createElement('input');
+      cmdInput.type = 'hidden';
+      cmdInput.name = 'cmd';
+      cmdInput.value = '_donations';
+
+      const businessInput = document.createElement('input');
+      businessInput.type = 'hidden';
+      businessInput.name = 'business';
+      businessInput.value = 'danielblandonmanrique@gmail.com';
+
+      const amountInput = document.createElement('input');
+      amountInput.type = 'hidden';
+      amountInput.name = 'amount';
+      amountInput.value = '1.00';
+
+      const currencyInput = document.createElement('input');
+      currencyInput.type = 'hidden';
+      currencyInput.name = 'currency_code';
+      currencyInput.value = 'USD';
+
+      paypalForm.appendChild(cmdInput);
+      paypalForm.appendChild(businessInput);
+      paypalForm.appendChild(amountInput);
+      paypalForm.appendChild(currencyInput);
+
+      document.body.appendChild(paypalForm);
+      paypalForm.submit();
+      document.body.removeChild(paypalForm);
+      
+      // Update progress bar after PayPal submission
+      updateProgressBar();
+      
+      // Close the modal after redirecting to PayPal
+      closeModal();
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('confirmationModal');
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>
